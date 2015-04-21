@@ -17,12 +17,15 @@
   },
   "homepage": "https://github.com/snackpackgames/project-vanilla-pudding-server",
   "devDependencies": {
-    "gulp": "^3.8.11"
+    "gulp": "^3.8.11",
+    "sqlite3": "^3.0.5"
   },
   "dependencies": {
     "bookshelf": "^0.7.9",
     "express": "^4.12.3",
+    "knex": "^0.7.6",
     "lodash": "^3.7.0",
-    "passport": "^0.2.1"
+    "passport": "^0.2.1",
+    "pg": "^4.3.0"
   }
 }
