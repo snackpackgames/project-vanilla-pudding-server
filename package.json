@@ -1,0 +1,28 @@
+{
+  "name": "project-vanilla-pudding-server",
+  "version": "0.0.1",
+  "description": "api server for project-vanilla-pudding",
+  "main": "server.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snackpackgames/project-vanilla-pudding-server.git"
+  },
+  "author": "Brendon Roberto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snackpackgames/project-vanilla-pudding-server/issues"
+  },
+  "homepage": "https://github.com/snackpackgames/project-vanilla-pudding-server",
+  "devDependencies": {
+    "gulp": "^3.8.11"
+  },
+  "dependencies": {
+    "bookshelf": "^0.7.9",
+    "express": "^4.12.3",
+    "lodash": "^3.7.0",
+    "passport": "^0.2.1"
+  }
+}
