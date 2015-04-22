@@ -20,7 +20,7 @@ knex = require('knex')(config);
 var bookshelf = require('bookshelf')(knex);
 
 // Require routes
-require('./routes')(app);
+require('routes')(app);
 
 // Start server
 var port = process.env.PORT || 8000;
