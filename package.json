@@ -2,8 +2,9 @@
   "name": "project-vanilla-pudding-server",
   "version": "0.0.1",
   "description": "api server for project-vanilla-pudding",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
+    "start": "node src/server.js",
     "test": "gulp test"
   },
   "repository": {
@@ -18,9 +19,14 @@
   "homepage": "https://github.com/snackpackgames/project-vanilla-pudding-server",
   "devDependencies": {
     "gulp": "^3.8.11",
+    "gulp-jshint": "^1.10.0",
+    "gulp-shell": "^0.4.1",
+    "gulp-util": "^3.0.4",
+    "jshint-stylish": "^1.0.1",
     "sqlite3": "^3.0.5"
   },
   "dependencies": {
+    "body-parser": "^1.12.3",
     "bookshelf": "^0.7.9",
     "express": "^4.12.3",
     "knex": "^0.7.6",

@@ -1,8 +1,9 @@
 // Require dependencies
-var express   = require('express'),
-    _         = require('lodash'),  
-    passport  = require('passport'),
-    path      = require('path'),
+var express    = require('express'),
+    _          = require('lodash'),  
+    passport   = require('passport'),
+    path       = require('path'),
+    bodyParser = require('body-parser'),
     knex;
 
 var app = express();
@@ -18,6 +19,10 @@ var config = require('knexfile')[process.env.CONFIGURATION_ENV] || {
 knex = require('knex')(config);
 
 var bookshelf = require('bookshelf')(knex);
+app.set('bookshelf', bookshelf);
+
+// Set up middleware
+app.use(bodyParser.json());
 
 // Require routes
 require('routes')(app);

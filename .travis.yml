@@ -9,3 +9,6 @@ before_install:
 
 before_script:
     - source env.sh
+
+notifications:
+  slack: snackpackgames:w4sj03P0QwSiGYWye0Sm0J6t
