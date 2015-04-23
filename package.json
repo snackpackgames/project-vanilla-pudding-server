@@ -26,12 +26,16 @@
     "sqlite3": "^3.0.5"
   },
   "dependencies": {
+    "bcrypt": "^0.8.2",
+    "bluebird": "^2.9.24",
     "body-parser": "^1.12.3",
     "bookshelf": "^0.7.9",
     "express": "^4.12.3",
+    "express-session": "^1.11.1",
     "knex": "^0.7.6",
     "lodash": "^3.7.0",
     "passport": "^0.2.1",
+    "passport-http": "^0.2.2",
     "pg": "^4.3.0"
   }
 }
