@@ -1,5 +1,5 @@
 module.exports = function(passport, User) {
-    var BasicStrategy = require('passport-http').BasicStrategy
+    var BasicStrategy = require('passport-http').BasicStrategy;
 
     passport.serializeUser(function(user, done) {
         done(null, user.id);
@@ -20,4 +20,4 @@ module.exports = function(passport, User) {
             return done(err);
         });
     }));
-}
+};

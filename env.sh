@@ -7,6 +7,7 @@ fi
 
 export NODE_PATH=$NODE_PATH:$(pwd):$(pwd)/src
 export SQLITE3_DB_PATH=$(pwd)/dev.sqlite3
+export CONFIGURATION_ENV=development
 
 if [ -f "$FILE" ]; then
     source "$FILE"

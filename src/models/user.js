@@ -19,6 +19,9 @@ module.exports = function(app) {
             var password = this.get('password');
             var hash = bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
             this.set('password_hash', hash);
+        },
+        toSecureJSON: function() {
+            return _.omit(this.toJSON(), ['password', 'password_hash']);
         }
     }, {
         login: bluebird.method(function(email, password) {

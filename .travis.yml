@@ -6,6 +6,8 @@ node_js:
 before_install:
     - npm install -g gulp
     - npm install -g knex
+    - npm install -g mocha
+    - npm install -g istanbul
 
 before_script:
     - source env.sh
