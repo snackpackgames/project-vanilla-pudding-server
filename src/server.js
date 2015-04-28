@@ -6,12 +6,15 @@ var express        = require('express'),
     bodyParser     = require('body-parser'),
     cookieParser   = require('cookie-parser'),
     morgan         = require('morgan'),
+    debug          = require('debug')('development'),
     expressSession = require('express-session'),
     knex;
 
 var app = express();
 
+// Set libraries
 app.set('underscore', _);
+app.set('debug', debug);
 
 // Initialize DB
 var config = require('knexfile')[process.env.CONFIGURATION_ENV] || {
@@ -24,6 +27,7 @@ var config = require('knexfile')[process.env.CONFIGURATION_ENV] || {
 knex = require('knex')(config);
 
 var bookshelf = require('bookshelf')(knex);
+bookshelf.plugin('registry');
 app.set('bookshelf', bookshelf);
 
 // Set up middleware

@@ -12,7 +12,7 @@ gulp.task('default', ['test', 'watch']);
 
 gulp.task('createdb', function() {
     return gulp.src('')
-        .pipe(shell(['knex migrate:latest']));
+        .pipe(shell(['knex migrate:latest', 'knex seed:run']));
 });
 
 gulp.task('createtestdb', function() {
@@ -28,7 +28,7 @@ gulp.task('jshint', function() {
 
 gulp.task('test', ['jshint', 'createtestdb'], function() {
     return gulp.src('')
-        .pipe(shell(['istanbul cover _mocha']));
+        .pipe(shell(['istanbul cover _mocha -- -R spec']));
 });
 
 gulp.task('watch', function() {

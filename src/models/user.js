@@ -5,15 +5,20 @@ module.exports = function(app) {
     var _ = app.get('underscore');
 
     User = bookshelf.Model.extend({
-        tableName: "users",
+        tableName: 'users',
         initialize: function() {
-            this.on("creating", this.onCreating);
+            this.on('creating', this.onCreating);
+            this.on('saving', this.onSaving);
         },
         format: function(attrs) {
             return _.omit(attrs, 'password');
         },
         onCreating: function() {
             this.hashPassword();
+            this.set('created_at', new Date());
+        },
+        onSaving: function() {
+            this.set('updated_at', new Date());
         },
         hashPassword: function() {
             var password = this.get('password');
@@ -22,6 +27,9 @@ module.exports = function(app) {
         },
         toSecureJSON: function() {
             return _.omit(this.toJSON(), ['password', 'password_hash']);
+        },
+        resources: function() {
+            return this.hasMany('Resource');
         }
     }, {
         login: bluebird.method(function(email, password) {

@@ -23,7 +23,7 @@ module.exports = function(router, app) {
         });
     });
 
-    router.post('/login', passport.authenticate('basic', { session: false }), function(req, res) {
+    router.post('/login', passport.authenticate('basic-auth', { session: false }), function(req, res) {
         res.json(req.user);
     });
     
