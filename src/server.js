@@ -4,6 +4,8 @@ var express        = require('express'),
     passport       = require('passport'),
     path           = require('path'),
     bodyParser     = require('body-parser'),
+    cookieParser   = require('cookie-parser'),
+    morgan         = require('morgan'),
     expressSession = require('express-session'),
     knex;
 
@@ -26,6 +28,8 @@ app.set('bookshelf', bookshelf);
 
 // Set up middleware
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(morgan('dev'));
 app.use(expressSession({
     secret: process.env.EXPRESS_SECRET_KEY,
     resave: true,

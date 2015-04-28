@@ -13,7 +13,7 @@ module.exports = function(passport, User) {
         });
     });
 
-    passport.use(new BasicStrategy(function(email, password, done) {
+    passport.use('basic-auth', new BasicStrategy(function(email, password, done) {
         User.login(email, password).then(function(user) {
             return user ? done(null, user) : done(null, false, { message:"Invalid password" });
         }).catch(function(err) {
