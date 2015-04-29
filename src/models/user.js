@@ -4,7 +4,7 @@ module.exports = function(app) {
     var bookshelf = app.get('bookshelf');
     var _ = app.get('underscore');
 
-    User = bookshelf.Model.extend({
+    var User = bookshelf.Model.extend({
         tableName: 'users',
         initialize: function() {
             this.on('creating', this.onCreating);
@@ -30,6 +30,9 @@ module.exports = function(app) {
         },
         resources: function() {
             return this.hasMany('Resource');
+        },
+        transactions: function() {
+            return this.hasMany('Transactions');
         }
     }, {
         login: bluebird.method(function(email, password) {
@@ -39,6 +42,10 @@ module.exports = function(app) {
             });
         })
     });
+
+    if (!bookshelf.model('User')) {
+        bookshelf.model('User', User);
+    }
 
     return User;
 };
