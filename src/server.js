@@ -4,12 +4,17 @@ var express        = require('express'),
     passport       = require('passport'),
     path           = require('path'),
     bodyParser     = require('body-parser'),
+    cookieParser   = require('cookie-parser'),
+    morgan         = require('morgan'),
+    debug          = require('debug')('development'),
     expressSession = require('express-session'),
     knex;
 
 var app = express();
 
+// Set libraries
 app.set('underscore', _);
+app.set('debug', debug);
 
 // Initialize DB
 var config = require('knexfile')[process.env.CONFIGURATION_ENV] || {
@@ -22,10 +27,13 @@ var config = require('knexfile')[process.env.CONFIGURATION_ENV] || {
 knex = require('knex')(config);
 
 var bookshelf = require('bookshelf')(knex);
+bookshelf.plugin('registry');
 app.set('bookshelf', bookshelf);
 
 // Set up middleware
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(morgan('dev'));
 app.use(expressSession({
     secret: process.env.EXPRESS_SECRET_KEY,
     resave: true,
@@ -45,4 +53,6 @@ var port = process.env.PORT || 8000;
 app.listen(port);
 
 var appName = process.env.APPNAME || "project-vanilla-pudding-server";
-console.log("Starting application: " + appName + " on port: " + port);;
+console.log("Starting application: " + appName + " on port: " + port);
+
+module.exports = app;

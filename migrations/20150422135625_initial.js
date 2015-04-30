@@ -13,8 +13,8 @@ exports.up = function(knex, Promise) {
 
         knex.schema.createTable('actions', function(table) {
             table.increments();
-            table.string('name');
-            table.time('duration');
+            table.string('name').unique();
+            table.integer('duration');
         }),
         
         knex.schema.createTable('transactions', function(table) {

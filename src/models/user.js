@@ -4,21 +4,35 @@ module.exports = function(app) {
     var bookshelf = app.get('bookshelf');
     var _ = app.get('underscore');
 
-    User = bookshelf.Model.extend({
-        tableName: "users",
+    var User = bookshelf.Model.extend({
+        tableName: 'users',
         initialize: function() {
-            this.on("creating", this.onCreating);
+            this.on('creating', this.onCreating);
+            this.on('saving', this.onSaving);
         },
         format: function(attrs) {
             return _.omit(attrs, 'password');
         },
         onCreating: function() {
             this.hashPassword();
+            this.set('created_at', new Date());
+        },
+        onSaving: function() {
+            this.set('updated_at', new Date());
         },
         hashPassword: function() {
             var password = this.get('password');
             var hash = bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
             this.set('password_hash', hash);
+        },
+        toSecureJSON: function() {
+            return _.omit(this.toJSON(), ['password', 'password_hash']);
+        },
+        resources: function() {
+            return this.hasMany('Resource');
+        },
+        transactions: function() {
+            return this.hasMany('Transactions');
         }
     }, {
         login: bluebird.method(function(email, password) {
@@ -28,6 +42,10 @@ module.exports = function(app) {
             });
         })
     });
+
+    if (!bookshelf.model('User')) {
+        bookshelf.model('User', User);
+    }
 
     return User;
 };

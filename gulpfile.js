@@ -6,25 +6,18 @@ var gulp      = require('gulp'),
     bookshelf = require('bookshelf'),
     knex;
 
-var dbpath = process.env.SQLITE3_DB_PATH || './dev.sqlite3';
-
-var config = require('knexfile')[process.env.CONFIGURATION_ENV] || {
-    client: 'sqlite3',
-    connection: {
-      filename: dbpath
-    }
-};
-
-knex = require('knex')(config);
+var config = require('knexfile');
 
 gulp.task('default', ['test', 'watch']);
 
 gulp.task('createdb', function() {
     return gulp.src('')
-        .pipe(shell(['knex migrate:latest']))
-        .on('finish', function() {
-            gutil.log('Database successfully migrated');
-        });
+        .pipe(shell(['knex migrate:latest', 'knex seed:run']));
+});
+
+gulp.task('createtestdb', function() {
+    return gulp.src('')
+        .pipe(shell(['knex migrate:latest --env test']));
 });
 
 gulp.task('jshint', function() {
@@ -33,8 +26,9 @@ gulp.task('jshint', function() {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('test', ['jshint', 'createdb'], function() {
-    // Run tests here
+gulp.task('test', ['jshint', 'createtestdb'], function() {
+    return gulp.src('')
+        .pipe(shell(['istanbul cover _mocha -- -R spec']));
 });
 
 gulp.task('watch', function() {
