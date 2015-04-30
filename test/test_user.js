@@ -4,6 +4,8 @@ var expect = require('chai').expect;
 var bcrypt = require('bcrypt');
 var app    = require('server')
 var User   = require('models/user')(app);
+var faker  = require('faker');
+
 
 describe('User', function() {
     beforeEach(function(done) {
@@ -38,7 +40,22 @@ describe('User', function() {
 
         it('should successfuly create multiple users and save them to the database', function(done) {
             // TODO: Create multiple users and save them, then confirm they are retrievable
-            done();
+            var usersPromises = [];
+            for (var i = 0; i < 10; i++) {
+                usersPromises.push(new User({
+                    first_name: faker.name.firstName(),
+                    last_name: faker.name.lastName(),
+                    email: faker.internet.email(),
+                    password: faker.internet.password()
+                }).save());
+            }
+
+            Promise.all(usersPromises).then(function() {
+                new User().fetchAll().then(function(results) {
+                    expect(results.models.length).to.equal(usersPromises.length);
+                    done();
+                });
+            });
         });
 
         it('should hash the user\'s password on create', function(done) {

@@ -16,26 +16,28 @@ module.exports = function(app) {
 
         // initialize: run on object creation, registers event handlers
         initialize: function() {
-            this.on("creating", this.onCreating);
-            this.on("saving", this.onSaving);
+            this.on("creating", this.onCreating, this);
+            this.on("saving", this.onSaving, this);
         },
 
         // onCreating: 'creating' event handler, sets created_at to the current date
-        onCreating: function() {
-            this.set('created_at', new Date());
+        onCreating: function(model, attrs, options) {
+            model.set('created_at', new Date());
         },
 
         // onSaving: 'saving' event handler, creates a new update resource transaction for the user that is automatically complete
-        onSaving: function() {
-            new Action({ name: associatedActionName })
+        onSaving: function(model, attrs, options) {
+            model.set('updated_at', new Date());
+            return new Action({ name: associatedActionName })
             .fetch({ required: true }).then(function(action) {
                 new Transaction({ 
                     action_id: action.get('id'),
-                    user_id: this.get('user_id'),
+                    user_id: model.get('user_id'),
                     complete: true
                 }).save();
             }).catch(function(err) {
                 debug(err);
+                throw err;
             });
         },
 

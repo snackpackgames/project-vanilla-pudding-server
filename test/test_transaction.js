@@ -15,6 +15,7 @@ var testUserEmail = "test@test.com";
 var testUser;
 var testAction;
 var testResourceType;
+var resourceAction;
 
 describe('Transaction', function() {
 
@@ -47,10 +48,18 @@ describe('Transaction', function() {
                     duration: 0
                 }).save()
             ]);
+        }).then(function() {
+            return Promise.all([
+                new User({ email: testUserEmail }).fetch({ required: true }),
+                new ResourceType({ name: "Test Resource" }).fetch({ required: true }),
+                new Action({ name: testActionName }).fetch({ required: true }),
+                new Action({ name: Resource.associatedActionName() }).fetch({ required: true })
+            ]);
         }).then(function(results) {
             testUser = results[0];
             testResourceType = results[1];
             testAction = results[2];
+            resourceAction = results[3];
         }).then(function() {
             done();
         });
@@ -58,10 +67,7 @@ describe('Transaction', function() {
 
     describe('#initialize()', function() {
         beforeEach(function(done) {
-            new Action({
-                name: Resource.associatedActionName(),
-                duration: 0
-            }).fetch({ required: true }).then(function() {
+            bookshelf.knex('transactions').del().then(function() {
                 done();
             });
         });
@@ -76,27 +82,6 @@ describe('Transaction', function() {
                 return transaction.load(['user']);
             }).then(function(transaction) {
                 expect(transaction.related('user').get('id')).to.equal(testUser.get('id'));
-                done();
-            });
-        });
-
-        it('should automatically create transaction objects when the user\'s resources are modified', function(done) {
-            Promise.all([
-                new Action({ name: Resource.associatedActionName() }).fetch({ required: true }),
-                new Resource({
-                        user_id: testUser.get('id'),
-                        resource_type_id: testResourceType.get('id'),
-                        value: 10
-                }).save()
-            ]).then(function(results) {
-                var action = results[0];
-
-                return new Transaction({
-                    action_id: action.get('id')
-                }).fetchAll();
-            }).then(function(transactions) {
-                // TODO: Make test better
-                expect(transactions).to.not.be.null;
                 done();
             });
         });
