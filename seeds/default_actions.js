@@ -7,6 +7,6 @@ exports.seed = function(knex, Promise) {
 
         // Inserts seed entries
         knex('actions').insert({id: 1, name: 'ACTION_UPDATE_RESOURCE'}),
-        knex('actions').insert({id: 2, name: 'ACTION_START_RESOURCE_COUNTDOWN'}),
+        knex('actions').insert({id: 2, name: 'ACTION_START_RESOURCE_COUNTDOWN'})
     );
 };

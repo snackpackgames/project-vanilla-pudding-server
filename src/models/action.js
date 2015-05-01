@@ -7,7 +7,7 @@ module.exports = function(app) {
         tableName: "actions",
         initialize: function() { },
         transactions: function() {
-            return this.hasMany('Transactions');
+            return this.hasMany('Transaction');
         }
     }, {
 

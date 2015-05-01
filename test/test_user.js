@@ -5,6 +5,7 @@ var bcrypt = require('bcrypt');
 var app    = require('server')
 var User   = require('models/user')(app);
 var faker  = require('faker');
+var Promise = require('bluebird');
 
 
 describe('User', function() {
