@@ -1,7 +1,7 @@
 process.env.CONFIGURATION_ENV = "test";
 
 var expect    = require('chai').expect;
-var app       = require('server');
+var app       = require('server')({ squelch: true });
 var User      = require('models/user')(app);
 var Resource  = require('models/resource')(app);
 var ResourceType = require('models/resource-type')(app);

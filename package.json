@@ -2,9 +2,9 @@
   "name": "project-vanilla-pudding-server",
   "version": "0.0.1",
   "description": "api server for project-vanilla-pudding",
-  "main": "src/server.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node src/index.js",
     "test": "gulp test"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "gulp-util": "^3.0.4",
     "jshint-stylish": "^1.0.1",
     "mocha": "^2.2.4",
+    "request": "^2.55.0",
     "sqlite3": "^3.0.5"
   },
   "dependencies": {

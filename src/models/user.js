@@ -1,8 +1,9 @@
 module.exports = function(app) {
     var bcrypt = require('bcrypt');
-    var bluebird = require('bluebird');
+    var Promise = require('bluebird');
     var bookshelf = app.get('bookshelf');
     var _ = app.get('underscore');
+    var debug = app.get('debug');
 
     var User = bookshelf.Model.extend({
         tableName: 'users',
@@ -14,6 +15,8 @@ module.exports = function(app) {
             return _.omit(attrs, 'password');
         },
         onCreating: function() {
+            var email = this.get('email').toLowerCase().trim();
+            this.set('email', email);
             this.hashPassword();
             this.set('created_at', new Date());
         },
@@ -35,10 +38,13 @@ module.exports = function(app) {
             return this.hasMany('Transactions');
         }
     }, {
-        login: bluebird.method(function(email, password) {
+        login: Promise.method(function(email, password) {
             if (!email || !password) throw new Error('Email and password are both required');
-            return new this({ email: email.toLowerCase().trim() }).fetch({ required: true }).tap(function(user) {
-                return bcrypt.compare(password, user.get('password_hash'));        
+            return new User({ email: email.toLowerCase().trim() }).fetch({ required: true }).then(function(user) {
+                debug("User logging in: %j", user);
+                return Promise.promisify(bcrypt.compare)(password, user.get('password_hash')).then(function(result) {
+                    return (result) ? user : undefined;
+                });
             });
         })
     });

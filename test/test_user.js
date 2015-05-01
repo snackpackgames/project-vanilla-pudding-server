@@ -2,7 +2,7 @@ process.env.CONFIGURATION_ENV = "test";
 
 var expect = require('chai').expect;
 var bcrypt = require('bcrypt');
-var app    = require('server')
+var app    = require('server')({ squelch: true });
 var User   = require('models/user')(app);
 var faker  = require('faker');
 
@@ -70,6 +70,31 @@ describe('User', function() {
             new User(userTestData).save().then(function(user) {
                 expect(bcrypt.compareSync(password, user.get('password_hash'))).to.be.true;
                 done(); 
+            });
+        });
+
+        it('should reject duplicate emails, non-case-sensitive', function(done) {
+            var email = faker.internet.email();
+            var testUser1 = {
+                first_name: faker.name.firstName(),
+                last_name: faker.name.lastName(),
+                email: email.toLowerCase(),
+                password: faker.internet.password()
+            };
+            
+            var testUser2 = {
+                first_name: faker.name.firstName(),
+                last_name: faker.name.lastName(),
+                email: email.toUpperCase(),
+                password: faker.internet.password()
+            };
+
+            new User(testUser1).save().then(function(user) {
+                expect(user).to.not.be.null;
+                return new User(testUser2).save();
+            }).catch(function(error) {
+                expect(error).to.not.be.null; 
+                done();
             });
         });
     });
