@@ -11,7 +11,7 @@ exports.up = function(knex, Promise) {
 
         knex.schema.createTable('resources', function(table) {
             table.increments();
-            table.integer('value').notNullable().defaultsTo(0);
+            table.integer('value').notNullable().defaultTo(0);
             table.integer('user_id').references('id').inTable('users').notNullable();
             table.integer('resource_type_id').references('id').inTable('resource_types').notNullable();
             table.timestamps();

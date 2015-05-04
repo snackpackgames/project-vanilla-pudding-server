@@ -14,14 +14,14 @@ exports.up = function(knex, Promise) {
         knex.schema.createTable('actions', function(table) {
             table.increments();
             table.string('name').notNullable().unique();
-            table.integer('duration').defaultsTo(0);
+            table.integer('duration').defaultTo(0);
         }),
         
         knex.schema.createTable('transactions', function(table) {
             table.increments();
             table.integer('user_id').references('id').inTable('users').notNullable();
             table.integer('action_id').references('id').inTable('actions').notNullable();
-            table.boolean('complete').notNullable().defaultsTo(false);
+            table.boolean('complete').notNullable().defaultTo(false);
             table.timestamps();
         }),
 

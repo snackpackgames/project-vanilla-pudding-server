@@ -1,10 +1,11 @@
 process.env.CONFIGURATION_ENV = "test";
 
-var expect = require('chai').expect;
-var bcrypt = require('bcrypt');
-var app    = require('server')({ squelch: true });
-var User   = require('models/user')(app);
-var faker  = require('faker');
+var expect  = require('chai').expect;
+var bcrypt  = require('bcrypt');
+var app     = require('server')({ squelch: true });
+var User    = require('models/user')(app);
+var faker   = require('faker');
+var Promise = require('bluebird');
 
 
 describe('User', function() {

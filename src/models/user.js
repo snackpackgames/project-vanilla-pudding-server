@@ -1,15 +1,15 @@
 module.exports = function(app) {
-    var bcrypt = require('bcrypt');
-    var Promise = require('bluebird');
+    var Promise   = require('bluebird');
     var bookshelf = app.get('bookshelf');
-    var _ = app.get('underscore');
-    var debug = app.get('debug');
+    var bcrypt    = app.get('bcrypt');
+    var _         = app.get('underscore');
+    var debug     = app.get('debug');
 
     var User = bookshelf.Model.extend({
         tableName: 'users',
         initialize: function() {
-            this.on('creating', this.onCreating);
-            this.on('saving', this.onSaving);
+            this.on('creating', this.onCreating, this);
+            this.on('saving', this.onSaving, this);
         },
         format: function(attrs) {
             return _.omit(attrs, 'password');

@@ -9,6 +9,7 @@ var app         = require('server')({ squelch: true });
 var User        = require('models/user')(app);
 var faker       = require('faker');
 var bookshelf   = app.get('bookshelf');
+var Promise     = require('bluebird');
 
 var testUserData = {
     first_name: faker.name.firstName(),

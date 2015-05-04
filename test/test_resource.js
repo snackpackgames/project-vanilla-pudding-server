@@ -11,7 +11,7 @@ var Promise   = require('bluebird');
 var bookshelf = app.get('bookshelf');
 var testUser;
 var testResourceType;
-var resourceAction
+var resourceAction;
 
 
 describe('Resource', function() {
