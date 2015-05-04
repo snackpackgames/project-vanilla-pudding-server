@@ -32,9 +32,7 @@ describe('Base', function() {
 
     describe('#initialize()', function() {
         beforeEach(function(done) {
-            bookshelf.knex('bases').del().then(function() {
-                done();
-            });
+            bookshelf.knex('bases').del().then(done.bind(null, null));
         });
 
         it('should successfully create a new base for the specified user', function(done) {
@@ -50,9 +48,14 @@ describe('Base', function() {
             }).catch(function(err) { done(err);
             });
         });
+    });
+
+    describe('#onCreated()', function() {
+        beforeEach(function(done) {
+            bookshelf.knex('bases').del().then(done.bind(null, null));
+        });
 
         it('should create the default rooms on create', function(done) {
-            // Test create 
             new Base({
                 name: faker.company.companyName(),
                 user_id: testUser.get('id'),
@@ -60,7 +63,7 @@ describe('Base', function() {
             }).save().then(function(base) {
                 return base.load(['rooms']);
             }).then(function(base) {
-                expect(base.related('rooms').length).to.be.greaterThan(0);
+                expect(base.related('rooms').length).to.equal(1);
                 done();
             }).catch(function(err) {
                 done(err);
@@ -68,5 +71,55 @@ describe('Base', function() {
         });
     });
 
+    describe('#onSaved()', function() {
+        beforeEach(function(done) {
+            bookshelf.knex('bases').del().then(done.bind(null, null));
+        });
+
+        it('should create new rooms to match base level on save', function(done) {
+            new Base().save({
+                name: faker.company.companyName(),
+                user_id: testUser.get('id'),
+                level: 1
+            }).then(function(base) {
+                return base.load(['rooms']);
+            }).then(function(base) {
+                expect(base.related('rooms').length).to.equal(1);
+                return base.set('level', 3).save();
+            }).then(function(base) {
+                return base.load(['rooms']); 
+            }).then(function(base) {
+                expect(base.related('rooms').length).to.equal(3);
+                done();
+            });
+        });
+    });
+
+    describe('#levelUp()', function() {
+        var testBase;
+
+        beforeEach(function(done) {
+            bookshelf.knex('bases').del().then(function() {
+                return new Base().save({
+                    name: faker.company.companyName(),
+                    user_id: testUser.get('id'),
+                    level: 1
+                });
+            }).then(function(base) {
+                testBase = base;
+                done();
+            });
+        });
+
+        it('should level up the base by one when the method is called', function(done) {
+            testBase.levelUp().then(function(base) {
+                expect(base.get('level')).to.equal(2);
+                return base.levelUp();
+            }).then(function(base) {
+                expect(base.get('level')).to.equal(3);
+                done();
+            }).catch(done);
+        });
+    });
 
 });
