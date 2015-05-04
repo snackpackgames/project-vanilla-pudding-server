@@ -38,7 +38,7 @@ module.exports = function(app) {
                 debug("Build reqirements: %j", buildReqs);
 
                 // Todo: Verify buildReqs
-            })
+            });
         }
     }, {
 

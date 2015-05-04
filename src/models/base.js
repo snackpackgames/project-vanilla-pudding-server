@@ -45,7 +45,7 @@ module.exports = function(app) {
         },
         _module: function() {
             return this.hasOne('Module');
-        }
+        },
         levelUp: Promise.method(function() {
             return this.save({
                 level: this.get('level') + 1
