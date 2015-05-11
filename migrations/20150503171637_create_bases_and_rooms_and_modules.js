@@ -21,6 +21,7 @@ exports.up = function(knex, Promise) {
         knex.schema.createTable('modules', function(table) {
             table.increments();
             table.integer('module_type_id').references('id').inTable('module_types').notNullable();
+            table.integer('room_id').references('id').inTable('rooms');
             table.integer('level').notNullable().defaultTo(1);
             table.timestamps();
         }),

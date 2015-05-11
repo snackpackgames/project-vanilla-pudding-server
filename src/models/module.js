@@ -21,7 +21,14 @@ module.exports = function(app) {
             this.set('updated_at', new Date());
         },
         onSaved: function(model, attrs, options) {
-
+            // Save the room id
+            if (model.get('room_id')) { 
+                return new Room({ id: model.get('room_id') }).fetch({ required: true }).then(function(room) {
+                    if (!room.get('module_id')) {
+                        return room.save({ module_id: model.get('id') });
+                    }
+                });
+            }
         },
         room: function() {
             return this.belongsTo('Room');
