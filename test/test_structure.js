@@ -54,7 +54,7 @@ describe('Structure', function() {
     });
 
     it('should successfully create a structure for the specified user in the specified room', function(done) {
-        var _structure;
+        var structure;
         var room;
         Promise.all([
             new Structure().save({
@@ -63,16 +63,15 @@ describe('Structure', function() {
             }),
             testBase.load(['rooms'])
         ]).then(function(results) {
-            _structure = results[0];
+            structure = results[0];
             var base = results[1];
             room = base.related('rooms').at(0);
-            return room.set('structure_id', _structure.get('id')).save();
+            return room.set('structure_id', structure.get('id')).save();
         }).then(function(room) {
-            expect(room.get('structure_id')).to.equal(_structure.get('id'));
-            return _structure.load(['room'])
-        }).then(function(_structure) {
-            console.log(_structure.related('room'));
-            expect(_structure.related('room').get('id')).to.equal(room.get('id'));
+            expect(room.get('structure_id')).to.equal(structure.get('id'));
+            return structure.load(['room']);
+        }).then(function(structure) {
+            expect(structure.related('room').id).to.equal(room.get('id'));
             done();
         }).catch(done);
     });

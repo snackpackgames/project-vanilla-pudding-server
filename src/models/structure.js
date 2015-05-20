@@ -21,10 +21,11 @@ module.exports = function(app) {
             this.set('updated_at', new Date());
         },
         onSaved: function(model, attrs, options) {
-            // Save the room id
-            if (model.get('room_id')) { 
-                return new Room({ id: model.get('room_id') }).fetch({ required: true }).then(function(room) {
-                    if (!room.get('structure_id')) {
+            var Room = bookshelf.model('Room');
+            var room_id = model.get('room_id');
+            if (room_id) { 
+                return new Room({ id: room_id }).fetch({ required: true }).then(function(room) {
+                    if (room.get('structure_id') !== model.get('id')) {
                         return room.save({ structure_id: model.get('id') });
                     }
                 });
