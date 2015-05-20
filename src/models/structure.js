@@ -3,8 +3,8 @@ module.exports = function(app) {
     var bookshelf = app.get('bookshelf');
     var debug = app.get('debug');
 
-    var Module = bookshelf.Model.extend({
-        tableName: 'modules',
+    var Structure = bookshelf.Model.extend({
+        tableName: 'structures',
         initialize: function() {
             this.on('creating', this.onCreating, this);
             this.on('created', this.onCreated, this);
@@ -24,8 +24,8 @@ module.exports = function(app) {
             // Save the room id
             if (model.get('room_id')) { 
                 return new Room({ id: model.get('room_id') }).fetch({ required: true }).then(function(room) {
-                    if (!room.get('module_id')) {
-                        return room.save({ module_id: model.get('id') });
+                    if (!room.get('structure_id')) {
+                        return room.save({ structure_id: model.get('id') });
                     }
                 });
             }
@@ -33,16 +33,16 @@ module.exports = function(app) {
         room: function() {
             return this.belongsTo('Room');
         },
-        moduleType: function() {
-            return this.hasOne('ModuleType', 'module_type_id');
+        structureType: function() {
+            return this.hasOne('StructureType');
         },
         setRoom: function(room) {
             return this.save({ room_id: room.get('id') });
         },
         verifyBuildRequirements: function() {
-            return this.load(['moduleType']).then(function(module) {
-                var buildReqs = module.related('moduleType').parseBuildRequirements();
-                debug("Build reqirements: %j", buildReqs);
+            return this.load(['structureType']).then(function(self) {
+                var buildReqs = self.related('structureType').parseBuildRequirements();
+                debug("Build requirements: %j", buildReqs);
 
                 // Todo: Verify buildReqs
             });
@@ -51,9 +51,9 @@ module.exports = function(app) {
 
     });
 
-    if (!bookshelf.model('Module')) {
-        bookshelf.model('Module', Module);
+    if (!bookshelf.model('Structure')) {
+        bookshelf.model('Structure', Structure);
     }
 
-    return Module;
+    return Structure;
 };

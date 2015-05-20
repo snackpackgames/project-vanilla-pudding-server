@@ -3,8 +3,8 @@ module.exports = function(app) {
     var bookshelf = app.get('bookshelf');
     var debug = app.get('debug');
 
-    var ModuleType = bookshelf.Model.extend({
-        tableName: 'module_types',
+    var StructureType = bookshelf.Model.extend({
+        tableName: 'structure_types',
         initialize: function() {
 
         },
@@ -12,14 +12,14 @@ module.exports = function(app) {
             // Todo: parse and return build requirements based off of visual string
         },
         modules: function() {
-            return this.belongsToMany('Module');
+            return this.belongsToMany('Structure');
         }
     }, {
     });
 
-    if (!bookshelf.model('ModuleType')) {
-        bookshelf.model('ModuleType', ModuleType);
+    if (!bookshelf.model('StructureType')) {
+        bookshelf.model('StructureType', StructureType);
     }
 
-    return ModuleType;
+    return StructureType;
 };
